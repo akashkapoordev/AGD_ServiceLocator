@@ -5,10 +5,25 @@ namespace ServiceLocator.Sound
 {
     public class SoundService : MonoBehaviour
     {
+        public static SoundService Instance { get { return instance; } }
+        private static SoundService instance;
+
         [SerializeField] private SoundScriptableObject soundScriptableObject;
         [SerializeField] private AudioSource audioEffects;
         [SerializeField] private AudioSource backgroundMusic;
 
+        private void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Debug.LogWarning("There is already an instance of SoundService in the scene");
+                Destroy(this.gameObject);
+            }
+        }
         private void Start()
         {
             PlaybackgroundMusic(SoundType.BackgroundMusic, true);
