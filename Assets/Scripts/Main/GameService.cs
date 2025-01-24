@@ -34,12 +34,23 @@ namespace ServiceLocator.Main
 
         private void Start()
         {
+            createServices();
+            injectDependency();
+        }
+
+        void createServices()
+        {
             EventService = new EventService();
             UIService.SubscribeToEvents();
             MapService = new MapService(mapScriptableObject);
             WaveService = new WaveService(waveScriptableObject);
             SoundService = new SoundService(soundScriptableObject, SFXSource, BGSource);
             PlayerService = new PlayerService(playerScriptableObject);
+        }
+
+        void injectDependency()
+        {
+            PlayerService.init(UIService, MapService, SoundService);
         }
 
         private void Update()
