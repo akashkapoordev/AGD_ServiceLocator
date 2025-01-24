@@ -50,8 +50,8 @@ namespace ServiceLocator.Main
         void injectDependency()
         {
             PlayerService.init(UIService, MapService, SoundService);
-            WaveService.init(UIService,MapService, SoundService,EventService);
-            UIService.init(WaveService, EventService);
+            WaveService.init(UIService,MapService, SoundService,EventService,PlayerService);
+            UIService.init(WaveService, EventService,PlayerService);
             MapService.init(EventService);
         }
 
