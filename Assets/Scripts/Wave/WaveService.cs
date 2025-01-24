@@ -62,10 +62,20 @@ namespace ServiceLocator.Wave
         public void StarNextWave()
         {
             currentWaveId++;
+            Debug.Log($"Starting wave {currentWaveId}");
+
             var bloonsToSpawn = GetBloonsForCurrentWave();
+            Debug.Log($"Wave {currentWaveId}: Bloons to spawn = {bloonsToSpawn.Count}");
+
             var spawnPosition = mapService.GetBloonSpawnPositionForCurrentMap();
-            SpawnBloons(bloonsToSpawn, spawnPosition, 0, waveScriptableObject.SpawnRate);
+            Debug.Log($"Spawn position for wave {currentWaveId}: {spawnPosition}");
+
+            float spawnRate = waveScriptableObject.SpawnRate;
+            Debug.Log($"Spawn rate for wave {currentWaveId}: {spawnRate}");
+
+            SpawnBloons(bloonsToSpawn, spawnPosition, 0, spawnRate);
         }
+
 
         public async void SpawnBloons(List<BloonType> bloonsToSpawn, Vector3 spawnPosition, int startingWaypointIndex, float spawnRate)
         {

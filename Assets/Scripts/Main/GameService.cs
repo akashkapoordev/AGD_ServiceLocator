@@ -9,14 +9,14 @@ using ServiceLocator.UI;
 
 namespace ServiceLocator.Main
 {
-    public class GameService : GenericMonoSingleton<GameService>
+    public class GameService : MonoBehaviour
     {
         // Services:
-        public EventService EventService { get; private set; }
-        public MapService MapService { get; private set; }
-        public WaveService WaveService { get; private set; }
-        public SoundService SoundService { get; private set; }
-        public PlayerService PlayerService { get; private set; }
+        private EventService eventService;
+        private MapService mapService;
+        private WaveService waveService;
+        private SoundService soundService;
+        private PlayerService playerService;
 
         [SerializeField] private UIService uiService;
         public UIService UIService => uiService;
@@ -40,24 +40,24 @@ namespace ServiceLocator.Main
 
         void createServices()
         {
-            EventService = new EventService();
-            MapService = new MapService(mapScriptableObject);
-            WaveService = new WaveService(waveScriptableObject);
-            SoundService = new SoundService(soundScriptableObject, SFXSource, BGSource);
-            PlayerService = new PlayerService(playerScriptableObject);
+            eventService = new EventService();
+            mapService = new MapService(mapScriptableObject);
+            waveService = new WaveService(waveScriptableObject);
+            soundService = new SoundService(soundScriptableObject, SFXSource, BGSource);
+            playerService = new PlayerService(playerScriptableObject);
         }
 
         void injectDependency()
         {
-            PlayerService.init(UIService, MapService, SoundService);
-            WaveService.init(UIService,MapService, SoundService,EventService,PlayerService);
-            UIService.init(WaveService, EventService,PlayerService);
-            MapService.init(EventService);
+            playerService.init(UIService, mapService, soundService);
+            waveService.init(UIService,mapService, soundService,eventService,playerService);
+            UIService.init(waveService, eventService,playerService);
+            mapService.init(eventService);
         }
 
         private void Update()
         {
-            PlayerService.Update();
+            playerService.Update();
         }
     }
 }
