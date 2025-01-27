@@ -8,6 +8,8 @@ using ServiceLocator.Map;
 using ServiceLocator.Sound;
 using ServiceLocator.Events;
 using ServiceLocator.Player;
+using System.Collections;
+using System.Runtime.InteropServices;
 
 namespace ServiceLocator.Wave
 {
@@ -18,6 +20,7 @@ namespace ServiceLocator.Wave
         private SoundService soundService;
         private EventService eventService;
         private PlayerService playerService;
+        private CoroutineRunner coroutineRunner;
 
         private WaveScriptableObject waveScriptableObject;
         private BloonPool bloonPool;
@@ -32,13 +35,14 @@ namespace ServiceLocator.Wave
      
         }
 
-        public void init(UIService uIService,MapService mapService,SoundService soundService,EventService eventService,PlayerService playerService)
+        public void init(UIService uIService,MapService mapService,SoundService soundService,EventService eventService,PlayerService playerService,CoroutineRunner coroutineRunner)
         {
             this.uIService = uIService;
             this.mapService = mapService;
             this.soundService = soundService;
             this.eventService = eventService;
             this.playerService = playerService;
+            this.coroutineRunner = coroutineRunner; 
 
             InitializeBloons();
             SubscribeToEvents();
@@ -62,33 +66,28 @@ namespace ServiceLocator.Wave
         public void StarNextWave()
         {
             currentWaveId++;
-            Debug.Log($"Starting wave {currentWaveId}");
-
             var bloonsToSpawn = GetBloonsForCurrentWave();
-            Debug.Log($"Wave {currentWaveId}: Bloons to spawn = {bloonsToSpawn.Count}");
-
             var spawnPosition = mapService.GetBloonSpawnPositionForCurrentMap();
-            Debug.Log($"Spawn position for wave {currentWaveId}: {spawnPosition}");
-
-            float spawnRate = waveScriptableObject.SpawnRate;
-            Debug.Log($"Spawn rate for wave {currentWaveId}: {spawnRate}");
-
-            SpawnBloons(bloonsToSpawn, spawnPosition, 0, spawnRate);
+            coroutineRunner.StartWaveCoroutine( SpawnBloons(bloonsToSpawn, spawnPosition, 0, waveScriptableObject.SpawnRate));
         }
 
-
-        public async void SpawnBloons(List<BloonType> bloonsToSpawn, Vector3 spawnPosition, int startingWaypointIndex, float spawnRate)
+        public IEnumerator SpawnBloons(List<BloonType> bloonsToSpawn, Vector3 spawnPosition, int startingWaypointIndex, float spawnRate)
         {
-            foreach(BloonType bloonType in bloonsToSpawn)
-            {
+            foreach (BloonType bloonType in bloonsToSpawn)
+            { 
                 BloonController bloon = bloonPool.GetBloon(bloonType);
+
                 bloon.SetPosition(spawnPosition);
                 bloon.SetWayPoints(mapService.GetWayPointsForCurrentMap(), startingWaypointIndex);
-
                 AddBloon(bloon);
-                await Task.Delay(Mathf.RoundToInt(spawnRate * 1000));
+
+                yield return new WaitForSeconds(spawnRate);
             }
+
+            Debug.Log($"Finished spawning {bloonsToSpawn.Count} balloons for Wave {currentWaveId}");
         }
+
+
 
         private void AddBloon(BloonController bloonToAdd)
         {

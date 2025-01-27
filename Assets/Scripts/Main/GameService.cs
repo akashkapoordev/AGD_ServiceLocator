@@ -17,9 +17,13 @@ namespace ServiceLocator.Main
         private WaveService waveService;
         private SoundService soundService;
         private PlayerService playerService;
+       
 
         [SerializeField] private UIService uiService;
         public UIService UIService => uiService;
+
+        [SerializeField]private CoroutineRunner coroutineRunner;
+        public CoroutineRunner CoroutineRunner => coroutineRunner;
 
 
         // Scriptable Objects:
@@ -50,7 +54,7 @@ namespace ServiceLocator.Main
         void injectDependency()
         {
             playerService.init(UIService, mapService, soundService);
-            waveService.init(UIService,mapService, soundService,eventService,playerService);
+            waveService.init(UIService,mapService, soundService,eventService,playerService,coroutineRunner);
             UIService.init(waveService, eventService,playerService);
             mapService.init(eventService);
         }

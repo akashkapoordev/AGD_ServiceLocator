@@ -303,6 +303,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1275803723}
   - component: {fileID: 1275803724}
+  - component: {fileID: 1275803725}
   m_Layer: 0
   m_Name: GameService
   m_TagString: Untagged
@@ -338,12 +339,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiService: {fileID: 1107832201}
+  coroutineRunner: {fileID: 1275803725}
   mapScriptableObject: {fileID: 11400000, guid: 412d441209954ab47a08973a630f316a, type: 2}
   waveScriptableObject: {fileID: 11400000, guid: 1a1805a3a12f21d4c9847d85958ab9ce, type: 2}
   soundScriptableObject: {fileID: 11400000, guid: 1fe1d13385d932c4987f15e4b7d1cc49, type: 2}
   playerScriptableObject: {fileID: 11400000, guid: ba423c4fbfbefa248b49a627b9e607b6, type: 2}
   SFXSource: {fileID: 1495988717}
   BGSource: {fileID: 2019223321}
+--- !u!114 &1275803725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1275803722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32c81c36244d9b428b01578a8c80e54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1495988716
 GameObject:
   m_ObjectHideFlags: 0
