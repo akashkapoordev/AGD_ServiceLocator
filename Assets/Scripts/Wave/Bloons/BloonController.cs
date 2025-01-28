@@ -122,10 +122,15 @@ namespace ServiceLocator.Wave.Bloon
 
         private bool HasLayeredBloons() => bloonScriptableObject.LayeredBloons.Count > 0;
 
-        private void SpawnLayeredBloons() => waveService.SpawnBloons(bloonScriptableObject.LayeredBloons,
-                                                                                          bloonView.transform.position,
-                                                                                          currentWaypointIndex,
-                                                                                          bloonScriptableObject.LayerBloonSpawnRate);
+
+        private void SpawnLayeredBloons()
+        {
+            waveService.StartWaveCoroutine(waveService.SpawnBloons(
+                bloonScriptableObject.LayeredBloons,
+                bloonView.transform.position,
+                currentWaypointIndex,
+                bloonScriptableObject.LayerBloonSpawnRate));
+        }
 
         public BloonType GetBloonType() => bloonScriptableObject.Type;
 
